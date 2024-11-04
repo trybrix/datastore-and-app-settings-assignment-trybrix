@@ -1,6 +1,8 @@
 package edu.farmingdale.datastoredemo.ui
 
-import android.widget.Toast
+// Hints on the imports - some were already preloaded and left
+import android.widget.Toast // Toast is used
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -13,7 +15,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
+import androidx.compose.material3.Button  // Button also
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,7 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
+import androidx.compose.material3.Switch  // Switch for the darkMode
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -36,7 +38,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview  // Then preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -46,6 +48,15 @@ import edu.farmingdale.datastoredemo.data.local.LocalEmojiData
 
 /*
  * Screen level composable
+ * ToDo
+ *  - Make the items clickable. When you click an emoji, a toast should appear explaining it, as shown in the image.
+ *  - Add a control (e.g., checkbox or switch) to toggle between light and dark modes.
+ *  - Apply the new theme when the control is toggled, as shown in the images.
+ *  - Add comments to explain your code.
+ *  - Ensure the app saves user settings, remembering them after closing and reopening.
+ *  - Test the app's navigation in both portrait and landscape modes.
+ *  - Push your code to your repository.
+ *  - Submit the repository URL here.
  */
 @Composable
 fun EmojiReleaseApp(
@@ -116,7 +127,7 @@ fun EmojiReleaseLinearLayout(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
-    val cntxt = LocalContext.current
+    val cntxt = LocalContext.current // Unused variable
     LazyColumn(
         modifier = modifier,
         contentPadding = contentPadding,
@@ -130,6 +141,22 @@ fun EmojiReleaseLinearLayout(
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.primary
                 ),
+                modifier = Modifier
+                    .height(110.dp)
+                    .clickable {
+                        // Shows the Toast message - cv to LazyVerticalGrid
+                        Toast.makeText(cntxt, "This is $e", Toast.LENGTH_SHORT).show()
+                        /*
+                        todo[x] - https://developer.android.com/guide/topics/ui/notifiers/toasts
+                            instead of a Toast - a snackbar can be placed as an alternative **
+
+                        val text = "Hello toast!"
+                        val duration = Toast.LENGTH_SHORT
+
+                        val toast = Toast.makeText(this, text, duration) // in Activity
+                        toast.show()
+                         */
+                    },
                 shape = MaterialTheme.shapes.medium
             ) {
                     Text(
@@ -151,6 +178,7 @@ fun EmojiReleaseGridLayout(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
+    val cntxt = LocalContext.current // Unused variable
     LazyVerticalGrid(
         modifier = modifier,
         columns = GridCells.Fixed(3),
@@ -166,7 +194,11 @@ fun EmojiReleaseGridLayout(
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.primary
                 ),
-                modifier = Modifier.height(110.dp),
+                modifier = Modifier.height(110.dp)
+                    .clickable {
+                    // Show a Toast message with the selected emoji
+                    Toast.makeText(cntxt, "This is $e", Toast.LENGTH_SHORT).show()
+                },
                 shape = MaterialTheme.shapes.medium
             ) {
                 Text(
