@@ -14,10 +14,14 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
 )
 
 class EmojiReleaseApplication: Application() {
+    // Late-initialized variable for the UserPreferencesRepository.
+    // This will manage access to user preferences stored in DataStore.
     lateinit var userPreferencesRepository: UserPreferencesRepository
 
     override fun onCreate() {
         super.onCreate()
+        // Init userPreferencesRepository with the DataStore instance
+        // Allows userPreferencesRepository to read and save user preferences throughout the app's lifetime
         userPreferencesRepository = UserPreferencesRepository(dataStore)
     }
 }

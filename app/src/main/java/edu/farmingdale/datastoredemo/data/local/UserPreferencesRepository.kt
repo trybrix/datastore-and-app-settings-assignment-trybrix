@@ -37,10 +37,27 @@ class UserPreferencesRepository(
             preferences[IS_LINEAR_LAYOUT] ?: true
         }
 
+    // Makes a Flow isDarkTheme - users theme preferences
+    val isDarkTheme: Flow<Boolean> = dataStore.data
+        .catch { exception -> // catch block handles any exceptions while accessing dataStore.data
+            if (exception is IOException) {
+                Log.e(TAG, "Error reading preferences.", exception) // Log the exception to provide info about error
+                // Bottom left of screen cat icon
+                emit(emptyPreferences()) // if it has exception - sets emptyPreferences()
+            } else {
+                throw exception
+            }
+        }
+        .map { preferences -> // Map operator transforms the emitted Preferences object into a Boolean value
+            preferences[IS_DARK_THEME] ?: false // Default set to false for light theme
+        }
 
+    // Allows it to pause and resume without blocking the main thread
     suspend fun saveLayoutPreference(isLinearLayout: Boolean) {
-        dataStore.edit { preferences ->
+        dataStore.edit { preferences -> // Parameter inside this block represents the current stored data - block allows us to edit this data
             preferences[IS_LINEAR_LAYOUT] = isLinearLayout
+            // Saves the layout preference by associating the isLinearLayout Boolean value with the IS_LINEAR_LAYOUT key
+            // IS_LINEAR_LAYOUT is a predefined key that identifies this specific preference in DataStore
         }
     }
 

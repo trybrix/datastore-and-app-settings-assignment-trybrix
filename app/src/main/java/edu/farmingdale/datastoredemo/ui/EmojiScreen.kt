@@ -49,14 +49,12 @@ import edu.farmingdale.datastoredemo.data.local.LocalEmojiData
 /*
  * Screen level composable
  * ToDo
- *  - Make the items clickable. When you click an emoji, a toast should appear explaining it, as shown in the image.
- *  - Add a control (e.g., checkbox or switch) to toggle between light and dark modes.
- *  - Apply the new theme when the control is toggled, as shown in the images.
- *  - Add comments to explain your code.
- *  - Ensure the app saves user settings, remembering them after closing and reopening.
- *  - Test the app's navigation in both portrait and landscape modes.
- *  - Push your code to your repository.
- *  - Submit the repository URL here.
+ *  - [X]Make the items clickable. When you click an emoji, a toast should appear explaining it, as shown in the image.
+ *  - [xAdd a control (e.g., checkbox or switch) to toggle between light and dark modes.
+ *  - [x]Apply the new theme when the control is toggled, as shown in the images.
+ *  - [x]Add comments to explain your code.
+ *  - [x]Ensure the app saves user settings, remembering them after closing and reopening.
+ *  - [x]Test the app's navigation in both portrait and landscape modes.
  */
 @Composable
 fun EmojiReleaseApp(
@@ -67,6 +65,7 @@ fun EmojiReleaseApp(
     EmojiScreen(
         uiState = emojiViewModel.uiState.collectAsState().value,
         selectLayout = emojiViewModel::selectLayout,
+        toggleTheme = emojiViewModel::toggleTheme
     )
 }
 
@@ -74,9 +73,12 @@ fun EmojiReleaseApp(
 @Composable
 private fun EmojiScreen(
     uiState: EmojiReleaseUiState,
-    selectLayout: (Boolean) -> Unit
+    selectLayout: (Boolean) -> Unit,
+    toggleTheme: (Boolean) -> Unit // New parameter to toggle theme
 ) {
     val isLinearLayout = uiState.isLinearLayout
+    val isDarkTheme = uiState.isDarkTheme // Retrieve current theme preference
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -93,6 +95,16 @@ private fun EmojiScreen(
                             tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
+
+                    // Switch for darkMode
+                    Switch(
+                        checked = isDarkTheme,
+                        onCheckedChange = { toggleTheme(it) },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = MaterialTheme.colorScheme.primary,
+                            uncheckedThumbColor = MaterialTheme.colorScheme.onPrimary
+                        )
+                    )
 
 
                 },
@@ -178,7 +190,7 @@ fun EmojiReleaseGridLayout(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
-    val cntxt = LocalContext.current // Unused variable
+    val cntxt = LocalContext.current // Added to the GridLayout
     LazyVerticalGrid(
         modifier = modifier,
         columns = GridCells.Fixed(3),
